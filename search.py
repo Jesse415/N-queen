@@ -10,12 +10,14 @@ import collections
 # Breadth-first Search
 # function
 #------------------------
-def bfs(board):
+def bfs(board, n):
     #-----------------------
     # Deque meant to act as
     # a queue - FIFO
     #-----------------------
     movesMade = collections.deque()
+    updateBoard = []
+    count = 1
 
     #TODO: Do Breadth-first Search: if n=1-6 print number of solutions &
     # and visual graph, Else if n=7-20 only print number of solutions
@@ -23,14 +25,40 @@ def bfs(board):
     #------------------------------
     # for loop to place Queen in
     # every possible spot and add
-    # to deque/queue
+    # to deque/queue power of n to count
     #------------------------------
-    for i in range(len(board)):
-        for j in range(len(board[i])):
-            if board[i][j] == '-':
-                board[i][j] = 'Q'
-                movesMade.append(copy.deepcopy(board))
-                board[i][j] = '-'
+
+    i = 0
+    for j in range(len(board[i])):
+        if board[i][j] == '-':
+            board[i][j] = 'Q'
+            movesMade.append(copy.deepcopy(board))
+            board[i][j] = '-'
+
+    while i < n-1:
+        k=0
+        i+=1
+        while k < pow(n, i+1):
+            updateBoard = movesMade.popleft()
+            for j in range(len(updateBoard[i])):
+                if updateBoard[i][j] == '-':
+                    updateBoard[i][j] = 'Q'
+                    movesMade.append(copy.deepcopy(updateBoard))
+                    updateBoard[i][j] = '-'
+                else:
+                    break
+                k+=1
+
+        #--------------Print deque--------
+    i=0
+    for i in range(len(movesMade)):
+        print("I: ", i)
+        for j in range(len(movesMade[i])):
+            print("This j: ", j, movesMade[i][j], end = " ")
+            print()
+        print('\n')
+
+
     return movesMade
 
 #-----------------------
@@ -94,14 +122,17 @@ def main():
     # Part A: Do breadth first
     # search add it to tree
     #-------------------------
-    movesMade = bfs(board)
+    movesMade = bfs(board, n)
 
     #----------------------------
     # Print every branch of tree
     #----------------------------
-    for i in range(len(movesMade)):
-        print(movesMade[i], end = " ")
-        print('\n')
+#    for i in range(len(movesMade)):
+#        print("I: ", i)
+#        for j in range(len(movesMade[i])):
+#            print("This j: ", j, movesMade[i][j], end = " ")
+#            print()
+#        print('\n')
 
     #-----------------------------
     # Time that taken to solution
