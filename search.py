@@ -17,15 +17,14 @@ def bfs(board, n):
     #-----------------------
     movesMade = collections.deque()
     updateBoard = []
-    count = 1
 
     #TODO: Do Breadth-first Search: if n=1-6 print number of solutions &
     # and visual graph, Else if n=7-20 only print number of solutions
 
     #------------------------------
     # for loop to place Queen in
-    # every possible spot and add
-    # to deque/queue power of n to count
+    # every spot in i=0 and add
+    # to deque/queue movesMade
     #------------------------------
 
     i = 0
@@ -35,6 +34,13 @@ def bfs(board, n):
             movesMade.append(copy.deepcopy(board))
             board[i][j] = '-'
 
+    #--------------------------------------------
+    # While loop to pop deque/queue and
+    # update the board with new placement
+    # of queen in the following i then
+    # adding it back to deque/queue. Effectively
+    # making a breadth first search tree
+    #--------------------------------------------
     while i < n-1:
         k=0
         i+=1
@@ -48,16 +54,6 @@ def bfs(board, n):
                 else:
                     break
                 k+=1
-
-        #--------------Print deque--------
-    i=0
-    for i in range(len(movesMade)):
-        print("I: ", i)
-        for j in range(len(movesMade[i])):
-            print("This j: ", j, movesMade[i][j], end = " ")
-            print()
-        print('\n')
-
 
     return movesMade
 
@@ -80,7 +76,7 @@ def sa(grid):
     return something
 
 #-----------------------------------
-# Function to determin the distance
+# Function to determine the distance
 # to solution
 #-----------------------------------
 def cost():
@@ -88,16 +84,47 @@ def cost():
 
     return distance
 
+def vetForSolution(checkBoard, n):
+
+    if n == 1:
+        return True
+
+    else:
+        for y in range(len(checkBoard)):
+            for x in range(len(checkBoard[y])):
+                if checkBoard[y][x]=='Q': #Found a queen
+
+                    #----------------------
+                    # Check for column down
+                    #----------------------
+                    for j in range(y+1,n):
+    	                if checkBoard[j][x] == 'Q':
+      	                    return False
+
+                    #--------------------------
+                    # Check Diagonal Left Down
+                    #--------------------------
+                    for a,b in zip(range(x-1,-1,-1),range(y+1,n,1)):
+    	                if checkBoard[b][a] == 'Q':
+      	                    return False
+
+                    #-----------------------------
+                    # Check Diagonal Right Down
+                    #-----------------------------
+                    for a,b in zip(range(x+1,n),range(y+1,n,1)):
+    	                if checkBoard[b][a] == 'Q':
+      	                    return False
+
+        return True
 
 #------------------------
 # Main Function asking
 # for the initial input
 #------------------------
-#TODO: Hardcode n= 1-20
-
 def main():
 
     board = []
+    solutions = []
 
     #-----------------------
     # Made to test different
@@ -124,15 +151,26 @@ def main():
     #-------------------------
     movesMade = bfs(board, n)
 
+    for x in range(len(movesMade)):
+        possibleSolution = movesMade.popleft()
+
+        if vetForSolution(possibleSolution, n) is True:
+            solutions.append(copy.deepcopy(possibleSolution))
+
     #----------------------------
     # Print every branch of tree
     #----------------------------
-#    for i in range(len(movesMade)):
-#        print("I: ", i)
-#        for j in range(len(movesMade[i])):
-#            print("This j: ", j, movesMade[i][j], end = " ")
-#            print()
-#        print('\n')
+
+    if solutions == 0:
+        print("There are NO solutions")
+    else:
+        for i in range(len(solutions)):
+            for j in range(len(solutions[i])):
+                print("This j: ", j, solutions[i][j], end = " ")
+                print()
+            print()
+        print("Number for Solutions: ", i+1)
+
 
     #-----------------------------
     # Time that taken to solution
