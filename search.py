@@ -145,6 +145,13 @@ def main():
     start = time.time()
     time.process_time()
 
+
+#-------------------------------------------
+#TODO: Make a switch case for selecting
+#      which search we will use and print
+#      solution
+#-------------------------------------------
+
     #-------------------------
     # Part A: Do breadth first
     # search add it to tree
@@ -156,6 +163,26 @@ def main():
 
         if vetForSolution(possibleSolution, n) is True:
             solutions.append(copy.deepcopy(possibleSolution))
+
+    #----------------------------
+    # TODO: Make Case for Part A
+    #       Prunning BFS 
+    #----------------------------
+
+    #----------------------------
+    # TODO: Make Case for Part B
+    #       Hill climbing Search
+    #----------------------------
+
+    #----------------------------
+    # TODO: Make Case for Part B
+    #       Simulated Annealing
+    #       Search
+    #----------------------------
+
+
+
+
 
     #----------------------------
     # Print every branch of tree
