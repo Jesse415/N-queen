@@ -166,20 +166,37 @@ def main():
 
     #----------------------------
     # TODO: Make Case for Part A
-    #       Prunning BFS 
+    #       Prunning BFS
     #----------------------------
 
     #----------------------------
     # TODO: Make Case for Part B
     #       Hill climbing Search
     #----------------------------
+    # All possiblities from current state: Pick one of the best states and then update state
+    # and repeat
+
+    '''
+    Pseudocode For Hill climbing
+    X = Intial configuration
+    Iterate
+    1. E = Eval(x)
+    2. N = Neighbors(x)
+    3. For each Xi in N
+          Ei = Eval(Xi)
+    4. if all Ei's are lower than E
+          return x
+       else
+          i* = argmax(Ei)
+          X= Xi
+          E = Ei
+    '''
 
     #----------------------------
     # TODO: Make Case for Part B
     #       Simulated Annealing
     #       Search
     #----------------------------
-
 
 
 
