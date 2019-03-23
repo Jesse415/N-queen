@@ -5,7 +5,6 @@ import time
 import collections
 
 
-#TODO: Choose search method: Breadth-first, Hill climbing, or Simulated anneling search
 #------------------------
 # Breadth-first Search
 # function
@@ -51,11 +50,57 @@ def bfs(board, n):
                     updateBoard[i][j] = 'Q'
                     movesMade.append(copy.deepcopy(updateBoard))
                     updateBoard[i][j] = '-'
-                else:
-                    break
                 k+=1
 
     return movesMade
+
+def bfsPrunning(board, n):
+    #-----------------------
+    # Deque meant to act as
+    # a queue - FIFO
+    #-----------------------
+    movesMade = collections.deque()
+    updateBoard = []
+    i = 0
+
+    #------------------------------
+    # for loop to place Queen in
+    # every spot in i=0 and add
+    # to deque/queue movesMade
+    #------------------------------
+    for j in range(len(board[i])):
+        if board[i][j] == '-':
+            board[i][j] = 'Q'
+            movesMade.append(copy.deepcopy(board))
+            board[i][j] = '-'
+
+    #--------------------------------------------
+    # While loop to pop deque/queue and
+    # update the board with new placement
+    # of queen in the following i then
+    # adding it back to deque/queue. Effectively
+    # making a breadth first search tree
+    #--------------------------------------------
+    while i < n-1:
+        k=0
+        i+=1
+        temp = len(movesMade)
+        check = temp*n
+        count = 0
+        while k < check:
+                updateBoard = movesMade.popleft()
+
+                for j in range(len(updateBoard[i])):
+                    if updateBoard[i][j] == '-':
+                        updateBoard[i][j] = 'Q'
+                        if isMoveValid(updateBoard, n) is True:
+                            movesMade.append(copy.deepcopy(updateBoard))
+                            count += 1
+                        updateBoard[i][j] = '-'
+                    k+=1
+
+    return movesMade
+
 
 #-----------------------
 # Hill-climbing Search
@@ -83,6 +128,35 @@ def cost():
 #TODO: Cost function determining the distance to solutions
 
     return distance
+
+def isMoveValid(boardToCheck, n):
+    for y in range(len(boardToCheck)):
+        for x in range(len(boardToCheck[y])):
+            if boardToCheck[y][x]=='Q': #Found a queen
+
+                #----------------------
+                # Check for column up
+                #----------------------
+                for j in range(y+1,n):
+    	            if boardToCheck[j][x] == 'Q':
+      	                return False
+
+                #--------------------------
+                # Check Diagonal Left up
+                #--------------------------
+                for a,b in zip(range(x-1,-1,-1),range(y+1,n,1)):
+    	            if boardToCheck[b][a] == 'Q':
+      	                return False
+
+                #-----------------------------
+                # Check Diagonal Right up
+                #-----------------------------
+                for a,b in zip(range(x+1,n),range(y+1,n,1)):
+    	            if boardToCheck[b][a] == 'Q':
+      	                return False
+
+    return True
+
 
 def vetForSolution(checkBoard, n):
 
@@ -125,6 +199,7 @@ def main():
 
     board = []
     solutions = []
+    i=0
 
     #-----------------------
     # Made to test different
@@ -139,12 +214,6 @@ def main():
     #-----------------------
     board = np.full((n,n), '-')
 
-    #-----------------------
-    # Start time to solution
-    #-----------------------
-    start = time.time()
-    time.process_time()
-
 
 #-------------------------------------------
 #TODO: Make a switch case for selecting
@@ -152,68 +221,105 @@ def main():
 #      solution
 #-------------------------------------------
 
-    #-------------------------
-    # Part A: Do breadth first
-    # search add it to tree
-    #-------------------------
-    movesMade = bfs(board, n)
+    print("""
+    (1)For Breadth First Search\n
+    (2)For Breadth First Search with pruning\n
+    (3)For Hill Climbing\n
+    (4)For Simulated Annealing\n""")
 
-    for x in range(len(movesMade)):
-        possibleSolution = movesMade.popleft()
+    #-----------------------
+    # Start time to solution
+    #-----------------------
+    start = time.time()
+    time.process_time()
 
-        if vetForSolution(possibleSolution, n) is True:
-            solutions.append(copy.deepcopy(possibleSolution))
+    x = int(input())
+    while x < 5 and x > 0:
+        #-------------------------
+        # Part A: Do breadth first
+        # search add it to tree
+        #-------------------------
+        if x == 1:
+            movesMade = bfs(board, n)
 
-    #----------------------------
-    # TODO: Make Case for Part A
-    #       Prunning BFS
-    #----------------------------
+            for m in movesMade:
+                if vetForSolution(m, len(m)):
+                    solutions.append(m)
 
-    #----------------------------
-    # TODO: Make Case for Part B
-    #       Hill climbing Search
-    #----------------------------
-    # All possiblities from current state: Pick one of the best states and then update state
-    # and repeat
+#            for y in range(len(movesMade)):
+#                possibleSolution = movesMade.popleft()
+#
+#                if vetForSolution(possibleSolution, n) is True:
+#                    solutions.append(copy.deepcopy(possibleSolution))
 
-    '''
-    Pseudocode For Hill climbing
-    X = Intial configuration
-    Iterate
-    1. E = Eval(x)
-    2. N = Neighbors(x)
-    3. For each Xi in N
-          Ei = Eval(Xi)
-    4. if all Ei's are lower than E
-          return x
-       else
-          i* = argmax(Ei)
-          X= Xi
-          E = Ei
-    '''
+        #----------------------------
+        # Part A(b): Do breadth first
+        # search with Prunning
+        #----------------------------
+        elif x == 2:
+            solutionPrunning = bfsPrunning(board, n)
 
-    #----------------------------
-    # TODO: Make Case for Part B
-    #       Simulated Annealing
-    #       Search
-    #----------------------------
+            for y in range(len(solutionPrunning)):
+                solutions.append(copy.deepcopy(solutionPrunning))
 
+        #----------------------------
+        # Part B: Do Hill Climbing
+        # search
+        #----------------------------
+        elif x == 3:
+            #----------------------------
+            # TODO: Make Case for Part B
+            #       Hill climbing Search
+            #----------------------------
+            # All possiblities from current state:
+            # Pick one of the best states and then update state
+            # and repeat
 
-
+            '''
+            Pseudocode For Hill climbing
+            X = Intial configuration
+            Iterate
+            1. E = Eval(x)
+            2. N = Neighbors(x)
+            3. For each Xi in N
+            Ei = Eval(Xi)
+            4. if all Ei's are lower than E
+            return x
+            else
+            i* = argmax(Ei)
+            X= Xi
+            E = Ei
+            '''
+            return
+        #----------------------
+        # Part B: Do Simulated
+        # Annealing
+        #----------------------
+        elif x == 4:
+            #----------------------------
+            # TODO: Make Case for Part B
+            #       Simulated Annealing
+            #       Search
+            #----------------------------
+            return
+        else:
+            print("Invalid selection. Closing program")
+        break
 
     #----------------------------
     # Print every branch of tree
     #----------------------------
-
-    if solutions == 0:
-        print("There are NO solutions")
-    else:
+    if len(solutions) > 0:
         for i in range(len(solutions)):
             for j in range(len(solutions[i])):
                 print("This j: ", j, solutions[i][j], end = " ")
                 print()
             print()
         print("Number for Solutions: ", i+1)
+
+    else:
+        print("There are NO solutions")
+
 
 
     #-----------------------------
