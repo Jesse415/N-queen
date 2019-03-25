@@ -199,13 +199,14 @@ def main():
     (1)For Breadth First Search\n
     (2)For Breadth First Search with pruning\n""")
 
+    x = int(input())
+
     #-----------------------
     # Start time to solution
     #-----------------------
     start = time.time()
     time.process_time()
 
-    x = int(input())
     while x == 1 or x == 2:
         #-------------------------
         # Part A: Do breadth first
@@ -232,6 +233,13 @@ def main():
             print("Invalid selection. Closing program")
         break
 
+    #--------------------
+    # Stop time so not
+    # to include printing
+    # solutions
+    #--------------------
+    elapsed = time.time() - start
+
     if n < 7:
         #----------------------------
         # Print every branch of tree
@@ -239,7 +247,7 @@ def main():
         if len(solutions) > 0:
             for i in range(len(solutions)):
                 for j in range(len(solutions[i])):
-                    print("This j: ", j, solutions[i][j], end = " ")
+                    print(solutions[i][j], end = " ")
                     print()
                 print()
             print("Number for Solutions: ", i+1)
@@ -254,9 +262,10 @@ def main():
     #-----------------------------
     # Time that taken to solution
     #-----------------------------
-    elapsed = time.time() - start
-    math.ceil(elapsed)
-    print("Time from start to solution: ", round(elapsed, 1))
+    minutes = int(elapsed//60)
+    hours = int(elapsed // 3600)
+    #math.ceil(elapsed)
+    print("Time: H:", hours,"M:",minutes,"S:",(round(elapsed, 4))%60)
 
 if __name__ == "__main__":
     main()

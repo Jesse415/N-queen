@@ -117,8 +117,9 @@ def main():
     # Time that taken to solution
     #-----------------------------
     elapsed = time.time() - start
-    math.ceil(elapsed)
-    print("Time from start to solution: ", round(elapsed, 1))
-
+    minutes = int(elapsed//60)
+    hours = int(elapsed // 3600)
+    #math.ceil(elapsed)
+    print("Time: H:", hours,"M:",minutes,"S:",(round(elapsed, 4))%60)
 
 main()
