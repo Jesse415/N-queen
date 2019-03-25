@@ -8,7 +8,9 @@ def hillclimb(initialBoard, n):
     fitnessScore = []
     h = 9999
 
-        # Generate Neighbors
+    #-------------------
+    # Generate Neighbors
+    #-------------------
     for i in range(n):
         for j in range(n):
             newNeighbor = copy.deepcopy(initialBoard)
@@ -16,37 +18,54 @@ def hillclimb(initialBoard, n):
                 newNeighbor[i] = j
                 listOfNeighbors.append(newNeighbor)
 
+        #---------------------------------
         # Get the fitness of all neighbors
+        #---------------------------------
     for i in range(len(listOfNeighbors)):
         fitnessScore.append(fitness(listOfNeighbors[i]))
 
+        #--------------------------------
         # Get the board with best fitness
+        #--------------------------------
     for i in range(len(fitnessScore)):
         if fitnessScore[i] < h:
             h = fitnessScore[i]
             initialBoard = listOfNeighbors[i]
     fitnessScore = []
 
-#    for i in range(len(listOfNeighbors)):
-#        print(listOfNeighbors[i])
-
     return (initialBoard, h)
 
+#----------------
+# Checking the H
+# value Function
+#---------------
 def fitness(state):
     fitnessScore = 0
     for i in range(len(state)-1):
         for j in range(i+1, len(state)):
-            #checking for queens in the same column
+
+            #---------------------------------------
+            # Checking for queens in the same column
+            #---------------------------------------
             if state[i] == state[j]:
                 fitnessScore += 1
-            #checking for dia left
+
+            #----------------------
+            # Checking for dia left
+            #----------------------
             if state[i]-(j-i) == state[j]:
                 fitnessScore += 1
+
+            #--------------------
             # Check for dia right
+            #--------------------
             if state[i]+(j-i) == state[j]:
                 fitnessScore +=1
     return fitnessScore
 
+#---------------------
+# Print Board Function
+#---------------------
 def printBoard(finishedBoard):
     for i in range(len(finishedBoard)):
         for j in range(len(finishedBoard)):
@@ -58,15 +77,19 @@ def printBoard(finishedBoard):
 
 def main():
 
-    #n = int(input("Get n: "))
-    n = 7
+    n = int(input("Please enter number for grid: "))
     h = 9999
 
     while h > 0:
+
+        #----------------------
         #random board generator
+        #----------------------
         initialBoard = list(np.random.randint(low=0, high=n, size=n))
 
+        #--------------
         # Hill Climbing
+        #--------------
         bestBoard, h = hillclimb(initialBoard, n)
 
     printBoard(bestBoard)

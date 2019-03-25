@@ -17,9 +17,6 @@ def bfs(board, n):
     movesMade = collections.deque()
     updateBoard = []
 
-    #TODO: Do Breadth-first Search: if n=1-6 print number of solutions &
-    # and visual graph, Else if n=7-20 only print number of solutions
-
     #------------------------------
     # for loop to place Queen in
     # every spot in i=0 and add
@@ -102,37 +99,19 @@ def bfsPrunning(board, n):
     return movesMade
 
 
-#-----------------------
-# Hill-climbing Search
-# function
-#-----------------------
-def hcs(grid):
-    #TODO: Do Hill-climbing Search: If n<=8 print visual Else print
-    # Number of solutions
-    return something
-
-#----------------------
-# Simulated-anneling
-# Search
-#----------------------
-def sa(grid):
-    #TODO: Simulated-anneling Search: If n<=8 print visual Else print
-    # Number of solutions
-    return something
-
-#-----------------------------------
-# Function to determine the distance
-# to solution
-#-----------------------------------
-def cost():
-#TODO: Cost function determining the distance to solutions
-
-    return distance
-
+#--------------------------
+# Function for prunning
+# to check if the next move
+# made is a valid move
+#--------------------------
 def isMoveValid(boardToCheck, n):
     for y in range(len(boardToCheck)):
         for x in range(len(boardToCheck[y])):
-            if boardToCheck[y][x]=='Q': #Found a queen
+
+            #--------------
+            # Found a queen
+            #--------------
+            if boardToCheck[y][x]=='Q':
 
                 #----------------------
                 # Check for column up
@@ -166,7 +145,10 @@ def vetForSolution(checkBoard, n):
     else:
         for y in range(len(checkBoard)):
             for x in range(len(checkBoard[y])):
-                if checkBoard[y][x]=='Q': #Found a queen
+                #-------------
+                # Found a queen
+                #-------------
+                if checkBoard[y][x]=='Q':
 
                     #----------------------
                     # Check for column down
@@ -202,8 +184,7 @@ def main():
     i=0
 
     #-----------------------
-    # Made to test different
-    # inputs from user
+    # Input from user
     #-----------------------
     print("Please enter number for grid")
     n = int(input())
@@ -214,18 +195,9 @@ def main():
     #-----------------------
     board = np.full((n,n), '-')
 
-
-#-------------------------------------------
-#TODO: Make a switch case for selecting
-#      which search we will use and print
-#      solution
-#-------------------------------------------
-
     print("""
     (1)For Breadth First Search\n
-    (2)For Breadth First Search with pruning\n
-    (3)For Hill Climbing\n
-    (4)For Simulated Annealing\n""")
+    (2)For Breadth First Search with pruning\n""")
 
     #-----------------------
     # Start time to solution
@@ -234,7 +206,7 @@ def main():
     time.process_time()
 
     x = int(input())
-    while x < 5 and x > 0:
+    while x == 1 or x == 2:
         #-------------------------
         # Part A: Do breadth first
         # search add it to tree
@@ -246,12 +218,6 @@ def main():
                 if vetForSolution(m, len(m)):
                     solutions.append(m)
 
-#            for y in range(len(movesMade)):
-#                possibleSolution = movesMade.popleft()
-#
-#                if vetForSolution(possibleSolution, n) is True:
-#                    solutions.append(copy.deepcopy(possibleSolution))
-
         #----------------------------
         # Part A(b): Do breadth first
         # search with Prunning
@@ -262,64 +228,27 @@ def main():
             for y in range(len(solutionPrunning)):
                 solutions.append(copy.deepcopy(solutionPrunning))
 
-        #----------------------------
-        # Part B: Do Hill Climbing
-        # search
-        #----------------------------
-        elif x == 3:
-            #----------------------------
-            # TODO: Make Case for Part B
-            #       Hill climbing Search
-            #----------------------------
-            # All possiblities from current state:
-            # Pick one of the best states and then update state
-            # and repeat
-
-            '''
-            Pseudocode For Hill climbing
-            X = Intial configuration
-            Iterate
-            1. E = Eval(x)
-            2. N = Neighbors(x)
-            3. For each Xi in N
-            Ei = Eval(Xi)
-            4. if all Ei's are lower than E
-            return x
-            else
-            i* = argmax(Ei)
-            X= Xi
-            E = Ei
-            '''
-            return
-        #----------------------
-        # Part B: Do Simulated
-        # Annealing
-        #----------------------
-        elif x == 4:
-            #----------------------------
-            # TODO: Make Case for Part B
-            #       Simulated Annealing
-            #       Search
-            #----------------------------
-            return
         else:
             print("Invalid selection. Closing program")
         break
 
-    #----------------------------
-    # Print every branch of tree
-    #----------------------------
-    if len(solutions) > 0:
-        for i in range(len(solutions)):
-            for j in range(len(solutions[i])):
-                print("This j: ", j, solutions[i][j], end = " ")
+    if n < 7:
+        #----------------------------
+        # Print every branch of tree
+        #----------------------------
+        if len(solutions) > 0:
+            for i in range(len(solutions)):
+                for j in range(len(solutions[i])):
+                    print("This j: ", j, solutions[i][j], end = " ")
+                    print()
                 print()
-            print()
-        print("Number for Solutions: ", i+1)
+            print("Number for Solutions: ", i+1)
 
+        else:
+            print("There are NO solutions")
     else:
-        print("There are NO solutions")
-
+        i = len(solutions)+1
+        print("There are", i, "Solutions")
 
 
     #-----------------------------
