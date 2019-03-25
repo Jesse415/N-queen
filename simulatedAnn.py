@@ -8,37 +8,50 @@ def SA(initialBoard, n):
     temp = 999
     coolingRate = 0.003
 
+    #---------------------------------
     # Get the fitness for initialBoard
+    #---------------------------------
     fitnessScore = fitness(initialBoard)
     newBoard = copy.deepcopy(initialBoard)
 
-    #while h > 0:
     while temp > 1:
-            # Pick a random Queen's position
-            ranQueen = np.random.randint(low=0, high=n)
-            current = initialBoard[ranQueen]
-            newPosition = current
+        #-------------------------------
+        # Pick a random Queen's position
+        #-------------------------------
+        ranQueen = np.random.randint(low=0, high=n)
+        current = initialBoard[ranQueen]
+        newPosition = current
 
-            # Pick a random position to move the
-            # Queen to
-            while newPosition == current:
-                newPosition = np.random.randint(low=0, high=n)
+        #-----------------------------------
+        # Pick a random position to move the
+        # Queen to
+        #-----------------------------------
+        while newPosition == current:
+            newPosition = np.random.randint(low=0, high=n)
 
-            newBoard[ranQueen] = newPosition
+        newBoard[ranQueen] = newPosition
 
-            # Check Fitness
-            newFitScore = fitness(newBoard)
-            r = np.random.uniform(0,1)
-            p = e**-(newFitScore - fitnessScore)/temp
-            if fitnessScore >= newFitScore:
-                # Move Queen to newPosition
-                initialBoard = copy.deepcopy(newBoard)
-                fitnessScore = newFitScore
-            elif p < r:
-                initialBoard = copy.deepcopy(newBoard)
-                fitnessScore = newFitScore
+        #--------------
+        # Check Fitness
+        #--------------
+        newFitScore = fitness(newBoard)
 
-            temp *= 1-coolingRate
+        r = np.random.uniform(0,1)
+        p = e**-(newFitScore - fitnessScore)/temp
+
+        #----------------------------
+        # Move Queen to newPosition
+        # or based of the probability
+        # make the move
+        #----------------------------
+        if fitnessScore >= newFitScore:
+            initialBoard = copy.deepcopy(newBoard)
+            fitnessScore = newFitScore
+        elif p < r:
+            initialBoard = copy.deepcopy(newBoard)
+            fitnessScore = newFitScore
+
+        temp *= 1-coolingRate
 
     return (initialBoard, newFitScore)
 
@@ -46,17 +59,27 @@ def fitness(state):
     fitnessScore = 0
     for i in range(len(state)-1):
         for j in range(i+1, len(state)):
+
+            #--------------------------------------
             #checking for queens in the same column
+            #--------------------------------------
             if state[i] == state[j]:
                 fitnessScore += 1
+            #---------------------
             #checking for dia left
+            #---------------------
             if state[i]-(j-i) == state[j]:
                 fitnessScore += 1
+            #--------------------
             # Check for dia right
+            #--------------------
             if state[i]+(j-i) == state[j]:
                 fitnessScore +=1
     return fitnessScore
 
+#---------------------
+# Print Board Function
+#---------------------
 def printBoard(finishedBoard):
     for i in range(len(finishedBoard)):
         for j in range(len(finishedBoard)):
@@ -68,8 +91,7 @@ def printBoard(finishedBoard):
 
 def main():
 
-    #n = int(input("Get n: "))
-    n = 4
+    n = int(input("Please enter number for grid: "))
     h = 9999
 
     #-----------------------
@@ -79,14 +101,17 @@ def main():
     time.process_time()
 
     while h > 0:
+        #----------------------
         #random board generator
+        #----------------------
         initialBoard = list(np.random.randint(low=0, high=n, size=n))
 
+        #--------------------
         # Simmulated Anneling
+        #--------------------
         bestBoard, h = SA(initialBoard, n)
 
     printBoard(bestBoard)
-    print(h)
 
     #-----------------------------
     # Time that taken to solution
