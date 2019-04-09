@@ -80,6 +80,12 @@ def main():
     n = int(input("Please enter number for grid: "))
     h = 9999
 
+    #-----------------------
+    # Start time to solution
+    #-----------------------
+    start = time.time()
+    time.process_time()
+
     while h > 0:
 
         #----------------------
@@ -92,6 +98,31 @@ def main():
         #--------------
         bestBoard, h = hillclimb(initialBoard, n)
 
-    printBoard(bestBoard)
+        #----------------------------
+        # If n=1 break and printBoard
+        # elif n = 2 or 3 make h=0
+        # for no solutions
+        #----------------------------
+        if n == 1:
+            bestBoard = initialBoard
+            break
+        elif n == 2 or n == 3:
+            h = 0
+
+
+    if n == 2 or n == 3:
+        print("There are NO solutions.")
+    else:
+        printBoard(bestBoard)
+
+    #-----------------------------
+    # Time that taken to solution
+    #-----------------------------
+    elapsed = time.time() - start
+    minutes = int(elapsed//60)
+    hours = int(elapsed // 3600)
+    #math.ceil(elapsed)
+    print("Time: H:", hours,"M:",minutes,"S:",(round(elapsed, 4))%60)
+
 
 main()

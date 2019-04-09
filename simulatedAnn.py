@@ -106,19 +106,36 @@ def main():
         #----------------------
         initialBoard = list(np.random.randint(low=0, high=n, size=n))
 
+        #----------------------------
+        # If n=1 break and printBoard
+        # elif n = 2 or 3 make h=0
+        # for no solutions
+        #----------------------------
+        if n == 1:
+            bestBoard = initialBoard
+            h = 0
+            break
+        elif n == 2 or n == 3:
+            h = 0
+            break
+
         #--------------------
         # Simmulated Anneling
         #--------------------
         bestBoard, h = SA(initialBoard, n)
 
-    printBoard(bestBoard)
+    if n == 2 or n == 3:
+        print("There are NO solutions.")
+    else:
+        printBoard(bestBoard)
 
     #-----------------------------
     # Time that taken to solution
     #-----------------------------
     elapsed = time.time() - start
-    math.ceil(elapsed)
-    print("Time from start to solution: ", round(elapsed, 1))
-
+    minutes = int(elapsed//60)
+    hours = int(elapsed // 3600)
+    #math.ceil(elapsed)
+    print("Time: H:", hours,"M:",minutes,"S:",(round(elapsed, 4))%60)
 
 main()
